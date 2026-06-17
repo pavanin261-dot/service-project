@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoadVision AI | Road Damage Detection</title>
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>index.html
+    <header class="site-header">
+        <a class="brand" href="#home" aria-label="RoadVision AI home">
+            <span class="brand-mark">RV</span>
+            <span>RoadVision AI</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="#demo">Live Demo</a>
+            <a href="#dashboard">Dashboard</a>
+            <a href="#map">Map</a>
+            <a href="#account">Login</a>
+            <a href="#my-scans">My Scans</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <main id="home">
+        <section class="hero-section">
+            <div class="hero-bg" aria-hidden="true"></div>
+            <div class="hero-overlay" aria-hidden="true"></div>
+
+            <div class="hero-copy">
+                <p class="eyebrow">Deep learning for smarter roads</p>
+                <h1>AI Powered Road Damage Detection</h1>
+                <p class="hero-text">
+                    Detect potholes, cracks, broken edges, and unsafe road defects instantly using computer vision,
+                    location intelligence, and real-time AI analytics.
+                </p>
+                <div class="hero-actions">
+                    <a class="primary-button" href="#demo">Start Detection</a>
+                    <a class="secondary-button" href="#dashboard">Live Demo</a>
+                </div>
+            </div>
+
+            <aside class="ai-panel" aria-label="Live model status">
+                <div class="scan-card">
+                    <div class="scan-window">
+                        <span class="scan-line"></span>
+                        <div class="damage-box damage-box-one">Pothole 92%</div>
+                        <div class="damage-box damage-box-two">Crack 87%</div>
+                    </div>
+                    <div class="model-row">
+                        <span>YOLOv8 Road Model</span>
+                        <strong id="modelStatus">Checking API</strong>
+                    </div>
+                    <div class="pulse-grid">
+                        <i></i><i></i><i></i><i></i><i></i><i></i>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <section id="demo" class="section demo-section">
+            <div class="section-heading">
+                <p class="eyebrow">Live detection</p>
+                <h2>Upload a road image and watch the AI pipeline run</h2>
+                <p>Drag and drop an image, use camera simulation, or send the file to the FastAPI backend.</p>
+            </div>
+
+            <div class="demo-grid">
+                <div class="upload-zone" id="uploadZone">
+                    <input id="fileInput" type="file" accept="image/*" hidden>
+                    <div class="upload-icon">+</div>
+                    <h3>Drop road image here</h3>
+                    <p>Supports JPG, PNG, and camera snapshots</p>
+                    <div class="demo-actions">
+                        <button type="button" id="chooseFile">Upload Image</button>
+                        <button type="button" id="cameraMode">Camera Input</button>
+                    </div>
+                </div>
+
+                <div class="detection-result">
+                    <div class="result-stage">
+                        <span class="stage active">Upload Image</span>
+                        <span class="stage">AI Processing</span>
+                        <span class="stage">Detection Result</span>
+                    </div>
+                    <div class="result-preview" id="resultPreview">
+                        <div class="road-sample">
+                            <span class="box pothole">Pothole</span>
+                            <span class="box crack">Crack</span>
+                        </div>
+                    </div>
+                    <p class="result-message" id="resultMessage">Sample detection ready. Upload an image to analyze.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="section dashboard-section">
+            <div class="section-heading">
+                <p class="eyebrow">AI statistics dashboard</p>
+                <h2>High-speed analysis for city-scale monitoring</h2>
+            </div>
+
+            <div class="stats-grid">
+                <article>
+                    <span id="accuracyStat">95%</span>
+                    <p>Detection Accuracy</p>
+                </article>
+                <article>
+                    <span id="timeStat">0.8s</span>
+                    <p>Average Processing Time</p>
+                </article>
+                <article>
+                    <span id="scanStat">0</span>
+                    <p>Total Scans</p>
+                </article>
+                <article>
+                    <span>4</span>
+                    <p>Damage Categories</p>
+                </article>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="chart-panel">
+                    <h3>Damage Categories</h3>
+                    <div class="bar-row"><span>Potholes</span><i style="--value: 82%"></i><strong>82%</strong></div>
+                    <div class="bar-row"><span>Cracks</span><i style="--value: 68%"></i><strong>68%</strong></div>
+                    <div class="bar-row"><span>Road Wear</span><i style="--value: 44%"></i><strong>44%</strong></div>
+                    <div class="bar-row"><span>Water Damage</span><i style="--value: 57%"></i><strong>57%</strong></div>
+                </div>
+
+                <div class="alert-panel">
+                    <h3>Detection History</h3>
+                    <ul id="historyList">
+                        <li><span></span> Backend history will appear here after scans</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="map" class="section map-section">
+            <div class="section-heading">
+                <p class="eyebrow">Interactive road map</p>
+                <h2>Visualize road damage locations with smart markers</h2>
+                <p>Red markers indicate potholes, yellow markers indicate cracks, and blue markers show reviewed segments.</p>
+            </div>
+
+            <div class="map-grid">
+                <div class="map-card" aria-label="Road damage map">
+                    <div id="roadMap"></div>
+                    <div class="map-label">Kadapa live location map</div>
+                    <button class="location-button" id="useLocation" type="button">Use My Location</button>
+                </div>
+
+                <div class="comparison-card">
+                    <h3>Before vs After Detection</h3>
+                    <div class="comparison" id="comparison">
+                        <div class="before-layer"></div>
+                        <div class="after-layer" id="afterLayer"></div>
+                        <input id="compareSlider" type="range" min="20" max="80" value="52" aria-label="Before after slider">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section features-section">
+            <div class="section-heading">
+                <p class="eyebrow">Platform features</p>
+                <h2>Everything needed for smart road monitoring</h2>
+            </div>
+
+            <div class="feature-grid">
+                <article>
+                    <span>01</span>
+                    <h3>Real AI Detection</h3>
+                    <p>FastAPI upload route connects to a detector service ready for YOLOv8 weights.</p>
+                </article>
+                <article>
+                    <span>02</span>
+                    <h3>Detection Visualization</h3>
+                    <p>Bounding boxes, labels, confidence scores, and processed image previews.</p>
+                </article>
+                <article>
+                    <span>03</span>
+                    <h3>Scan History</h3>
+                    <p>Store uploaded images, predictions, timestamps, and statistics for dashboards.</p>
+                </article>
+                <article>
+                    <span>04</span>
+                    <h3>Cloud Ready</h3>
+                    <p>Frontend can deploy to Vercel while backend runs on Render or Railway.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="account" class="section account-section">
+            <div class="section-heading">
+                <p class="eyebrow">Secure access</p>
+                <h2>Operator access for road inspection teams</h2>
+                <p>Create an account, sign in, and connect every road scan to a secure project history.</p>
+            </div>
+
+            <div class="account-grid">
+                <form class="auth-card" id="registerForm">
+                    <span class="auth-kicker">New operator</span>
+                    <h3>Create Account</h3>
+                    <p class="auth-card-copy">Register once to start saving scans, GPS data, and detection reports.</p>
+                    <label for="registerName">Full name</label>
+                    <input id="registerName" type="text" placeholder="Your name">
+
+                    <label for="registerEmail">Email</label>
+                    <input id="registerEmail" type="email" placeholder="name@example.com" required>
+
+                    <label for="registerPassword">Password</label>
+                    <input id="registerPassword" type="password" placeholder="Minimum 6 characters" required>
+
+                    <button type="submit">Register</button>
+                </form>
+
+                <form class="auth-card" id="loginForm">
+                    <span class="auth-kicker">Returning user</span>
+                    <h3>Login</h3>
+                    <p class="auth-card-copy">Use your account to attach uploads to your inspection history.</p>
+                    <label for="loginEmail">Email</label>
+                    <input id="loginEmail" type="email" placeholder="name@example.com" required>
+
+                    <label for="loginPassword">Password</label>
+                    <input id="loginPassword" type="password" placeholder="Your password" required>
+
+                    <button type="submit">Login</button>
+                    <button class="ghost-button" id="logoutButton" type="button">Logout</button>
+                </form>
+
+                <div class="auth-status-card">
+                    <span class="auth-kicker">Session</span>
+                    <h3>Account Status</h3>
+                    <div class="status-pill" id="authStatus">Not logged in</div>
+                    <p class="auth-note">When logged in, uploads include your JWT token and can be connected to your account history.</p>
+                    <div class="auth-benefits">
+                        <span>Protected scans</span>
+                        <span>Saved reports</span>
+                        <span>JWT secured API</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="my-scans" class="section my-scans-section">
+            <div class="section-heading">
+                <p class="eyebrow">Personal reports</p>
+                <h2>My Scan History</h2>
+                <p>After login, your uploaded road scans appear here with confidence, location, date, and report links.</p>
+            </div>
+
+            <div class="my-scans-toolbar">
+                <button type="button" id="refreshMyScans">Refresh My Scans</button>
+                <span id="myScansStatus">Login to view your personal scan reports.</span>
+            </div>
+
+            <div class="my-scans-grid" id="myScansGrid">
+                <article class="empty-scan-card">
+                    <h3>No personal scans loaded</h3>
+                    <p>Login, upload a road image, then refresh this section.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="contact" class="section contact-section">
+            <div>
+                <p class="eyebrow">Our contact</p>
+                <h2>Contact the RoadVision AI team</h2>
+                <p>Reach our team for RoadVision AI project details, frontend support, AI model work, backend APIs, and UI improvements.</p>
+            </div>
+
+            <div class="team-contact-grid">
+                <article class="team-contact-card">
+                    <span>Frontend Developer</span>
+                    <h3>P Revanth Pavan Kumar</h3>
+                    <a href="tel:+919014483478">9014483478</a>
+                    <a href="mailto:249y1a05f4@ksrmce.ac.in">249y1a05f4@ksrmce.ac.in</a>
+                </article>
+
+                <article class="team-contact-card">
+                    <span>AI / YOLO Model Developer</span>
+                    <h3>P. Ramya</h3>
+                    <a href="tel:+916301687815">6301687815</a>
+                    <a href="mailto:249y1a05f6@ksrmce.ac.in">249y1a05f6@ksrmce.ac.in</a>
+                </article>
+
+                <article class="team-contact-card">
+                    <span>Backend Developer</span>
+                    <h3>S. Suguna</h3>
+                    <a href="tel:+918247520397">8247520397</a>
+                    <a href="mailto:249y1a05i9@ksrmce.ac.in">249y1a05i9@ksrmce.ac.in</a>
+                </article>
+
+                <article class="team-contact-card">
+                    <span>UI Developer</span>
+                    <h3>S Arshad</h3>
+                    <a href="tel:+917993455901">7993455901</a>
+                    <a href="mailto:249y1a05k3@ksrmce.ac.in">249y1a05k3@ksrmce.ac.in</a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>RoadVision AI. Road Damage Detection using FastAPI, YOLOv8, OpenCV, and smart city analytics.</p>
+    </footer>
+
+    <script src="config.js"></script>
+<script src="script.js?v=3"></script>
+</body>
+</html>

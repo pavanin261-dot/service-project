@@ -38,20 +38,11 @@ Path("predictions").mkdir(exist_ok=True)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.mount("/predictions", StaticFiles(directory="predictions"), name="predictions")
 
-frontend_dir = Path(__file__).resolve().parents[2] / "frontend"
+
+frontend_dir = Path(__file__).resolve().parent / "static"
+
 if frontend_dir.exists():
-    app.mount("/site", StaticFiles(directory=frontend_dir, html=True), name="site")
-
-
-@app.get("/")
-def home():
-    return {
-        "message": "RoadVision AI backend is running",
-        "docs": "/docs",
-        "health": "/health",
-        "site": "/site",
-    }
-
+    app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
 
 @app.get("/health")
 def health():

@@ -1,0 +1,1 @@
+window.API_BASE_URL = "https://service-project-production.up.railway.app";

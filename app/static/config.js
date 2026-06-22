@@ -1,1 +1,1 @@
-window.API_BASE_URL = "https://service-project-production.up.railway.app";
+window.API_BASE_URL = "https://service-project-6.onrender.com";

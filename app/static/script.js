@@ -1,4 +1,5 @@
-const API_BASE_URL = window.API_BASE_URL || "https://service-project-production.up.railway.app";
+const API_BASE_URL =
+    window.API_BASE_URL || "https://service-project-6.onrender.com";
 
 const uploadZone = document.querySelector("#uploadZone");
 const fileInput = document.querySelector("#fileInput");

@@ -51,3 +51,4 @@ def health():
 
 if frontend_dir.exists():
     app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
+
